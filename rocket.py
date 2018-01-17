@@ -10,11 +10,11 @@ ENV = {
 }
 
 raketti = {
-    'mass':     500,    # rocket mass, kg
-    'area':     0.8,    # rocket area in respect of direction of velocity
-    'thrust':  150000,   # rocket thrust, N
-    'flow':     100,    # flow rate, kg/sec
-    'fuel':     10000    # max amount of fuel, kg of fuel
+    'mass':     1300,    # rocket mass, kg
+    'area':     1.91,    # rocket area in respect of direction of velocity
+    'thrust':  265000,   # rocket thrust, N
+    'flow':     15,    # flow rate, kg/sec
+    'fuel':    5600    # max amount of fuel, kg of fuel
 }
 
 # animation framelength in seconds
@@ -45,8 +45,8 @@ pause = False
 # The main loop
 while 1:
     # freeze
-    if t >= 90:
-        print("Frozen.")
+    # if t >= 90:
+        #print("Frozen.")
         # freeze = True
         # time.sleep(86400)
 
@@ -60,13 +60,13 @@ while 1:
                 thrustPercent = 0.0
             fuel -= thrustPercent * raketti['flow']
 
-        m = raketti['mass'] + fuel
+        m = raketti['mass'] + fuel*2
 
         # update acceleration
         drag = 0.5 * ENV['airDensity'] * (v ** 2) * raketti['area'] * 0.5 * 10
         if v < 0:
             drag = -drag
-            print(thrust-drag)
+            #print(thrust-drag)
         a = ((thrust - drag) / m) - ENV['g'] * math.sin(math.radians(tilt))
 
         # update velocity by acceleration
@@ -76,7 +76,7 @@ while 1:
             v = ENV['speed_of_light'] - 1
 
         # print for debug
-        print('t: {}, v: {}, a: {}, dr: {}'.format(t, v, a, drag))
+        #print('t: {}, v: {}, a: {}, dr: {}'.format(t, v, a, drag))
 
     ##############################################
 
@@ -90,7 +90,6 @@ while 1:
         graph.insert(xVal,thrust, thrustGraph)
 
         rollspeed = frameLength*10
-        t = t + frameLength
 
     # Events
     for event in pygame.event.get():
@@ -120,19 +119,23 @@ while 1:
 
             if event.key == pygame.K_SPACE:
                 freeze = not freeze
-                print("Freeze ON")
+                print("Switch Freeze")
 
         rollspeed = 0
 
     # Graphics
     graph.render(rollspeed)
     graph.simu({
+        't': t,
         'v': v,
         'a': a,
         'm': m,
         'drag': drag,
-        'thrust': thrust
+        'thrust': thrust,
     })
 
     pygame.display.flip()
+    if not freeze:
+        t = t + frameLength
+
     time.sleep(frameLength/5)

@@ -13,13 +13,23 @@ class Graph:
     graphs = {}             # holds graph metadata like color, units...
     values = []             # holds x and y values of graphs
 
+    # SIMU
+
+    height = 0              # simu rocket's height from surface
+    lastUpdate = 0          # time(s) in which we updated simu last time
+    pixelsPerMeter = 1
+    simudots = []
+
+
     scr = None              # holds pygame surface object
+    font = None
 
     def __init__(self, x, y):
 
         # init pygame
         pygame.init()
         self.scr = pygame.display.set_mode((width, height))
+        self.font = pygame.font.SysFont('Helvetica', 26)
         self.originX = self.startX 
 
     def render(self, frameLength=0):
@@ -49,6 +59,7 @@ class Graph:
                 prev = [x,y]
 
         self.__drawDimensions()
+        self.__drawData()
 
         self.originX -= frameLength
 
@@ -81,8 +92,25 @@ class Graph:
         # y axis
         pygame.draw.line(self.scr, white, (self.startX, 0),(self.startX, height))
 
+    def __drawData(self):
+        surface = self.font.render('Some Text', True, (255,255,255))
+
+        self.scr.blit(surface,(10,10))
+
+
+
     def adjustScale(self, change):
         self.scale_y += change
 
+
+
+    # this does not belong here. This draws a white dot which simulates our rocket.
     def simu(self, vars):
-        print("Simu")
+
+        # update rocket height
+        # new height is previous height plus velocity multiplied by passed time in seconds.
+        self.height += vars['v'] * (vars['t']-self.lastUpdate) * self.pixelsPerMeter
+
+        print("Height: ", self.height)
+
+        self.scr.set_at((int(width*0.85), int(height-self.height)), (255,255,255))
