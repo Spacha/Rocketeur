@@ -27,7 +27,7 @@ rockets = {
         'name':     'Saturn V',
         'mass':     177000,
         'area':     80.12,
-        'thrust':   34020000,
+        'thrust':   64020000,
         'flow':     5*2542,
         'fuel':     1396500
     },
