@@ -92,11 +92,13 @@ while 1:
 
         # update acceleration
         density = Physics.density(h)
+        g = Physics.gravity(h)
+
         drag = 0.5 * density * (v ** 2) * rocket['area'] * 0.5 * 10
         if v < 0:
             drag = -drag
             #print(thrust-drag)
-        a = ((thrust - drag) / m) - ENV['g'] * math.sin(math.radians(tilt))
+        a = ((thrust - drag) / m) - g * math.sin(math.radians(tilt))
 
         # update velocity by acceleration
         v += a * frameLength
@@ -161,7 +163,8 @@ while 1:
         'm': m,
         'drag': drag,
         'thrust': thrust,
-        'density': density
+        'density': density,
+        'g': g
     })
 
     if not screen:

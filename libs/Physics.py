@@ -1,3 +1,5 @@
+import math
+
 def density(alt):
     denPerAlt = {
         '0': 1.22500,
@@ -47,3 +49,8 @@ def density(alt):
         return 1.0
 
     return denPerAlt[str(int(alt - (alt % 500)))]
+
+def gravity(alt):
+    a = 0.0053024*math.sin(alt)
+    b = 0.0000058*math.sin(2*alt)
+    return 9.88*(1 + a*a - b*b)
