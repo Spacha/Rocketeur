@@ -28,7 +28,7 @@ rockets = {
         'mass':     177000,
         'area':     80.12,
         'thrust':   34020000,
-        'flow':     2542,
+        'flow':     5*2542,
         'fuel':     1396500
     },
 }
@@ -163,8 +163,7 @@ while 1:
         'm': m,
         'drag': drag,
         'thrust': thrust,
-        'density': density,
-        'g': g
+        'density': density
     })
 
     if not screen:
