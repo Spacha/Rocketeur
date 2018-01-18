@@ -130,6 +130,6 @@ class Graph:
         self.simudots.append((rocketX,rocketY))
 
         # draw data
-        vars['height'] = self.height
+        #vars['height'] = self.height
         vars ['Gs'] = float(vars['a']/9.81)
         self.drawData(vars)

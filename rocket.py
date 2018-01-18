@@ -1,10 +1,13 @@
 import sys, math, time, pygame
 
 from libs import Grapher
+from libs import Physics
+
+#densitySL * lPressureRelative * temperatureSL / temperature
 
 # environment constants
 ENV = {
-    'airDensity': 1.00,
+    'airDensity': 1.225,
     'g': 9.81,
     'speed_of_light': 299792458
 }
@@ -60,6 +63,7 @@ pause = False
 screen = None
 
 rollspeed = 0
+prevTime = 0
 
 # The main loop
 while 1:
@@ -83,8 +87,12 @@ while 1:
 
         m = rocket['mass'] + fuel*2
 
+        # update height
+        h += v * (t-prevTime)
+
         # update acceleration
-        drag = 0.5 * ENV['airDensity'] * (v ** 2) * rocket['area'] * 0.5 * 10
+        density = Physics.density(h)
+        drag = 0.5 * density * (v ** 2) * rocket['area'] * 0.5 * 10
         if v < 0:
             drag = -drag
             #print(thrust-drag)
@@ -147,11 +155,13 @@ while 1:
     graph.render(rollspeed)
     graph.simu({
         't': t,
+        'h': h,
         'v': v,
         'a': a,
         'm': m,
         'drag': drag,
         'thrust': thrust,
+        'density': density
     })
 
     if not screen:
@@ -163,6 +173,7 @@ while 1:
     if not freeze:
         runTime = time.time() - startTime
         rollspeed = (frameLength + runTime) * 50
+        prevTime = t
         t = t + frameLength + runTime
 
     time.sleep(frameLength)
