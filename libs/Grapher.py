@@ -47,7 +47,6 @@ class Graph:
             for val in graph:
                 x = int(val[0] + self.originX)
                 y = int(val[1] * self.graphs[key]['scale_y'] * self.scale_y)    # scale factors
-                print(x,y)
                 
                 # if there is a gap between this and previous point
                 if abs(y - prev[1]) > 1 or abs(x - prev[0]) > 1:
@@ -132,4 +131,5 @@ class Graph:
 
         # draw data
         vars['height'] = self.height
+        vars ['Gs'] = float(vars['a']/9.81)
         self.drawData(vars)

@@ -9,13 +9,28 @@ ENV = {
     'speed_of_light': 299792458
 }
 
-raketti = {
-    'mass':     1300,    # rocket mass, kg
-    'area':     1.91,    # rocket area in respect of direction of velocity
-    'thrust':  265000,   # rocket thrust, N
-    'flow':     15,    # flow rate, kg/sec
-    'fuel':    5600    # max amount of fuel, kg of fuel
+rockets = {
+    'v-2':
+    {
+        'name':     'V-2',
+        'mass':     1300,    # rocket mass, kg
+        'area':     1.91,    # rocket area in respect of direction of velocity
+        'thrust':   265000,   # rocket thrust, N
+        'flow':     30,    # flow rate, kg/sec
+        'fuel':     5600    # max amount of fuel, kg of fuel
+    },
+    'saturn-v':
+    {
+        'name':     'Saturn V',
+        'mass':     177000,
+        'area':     80.12,
+        'thrust':   34020000,
+        'flow':     2542,
+        'fuel':     1396500
+    },
 }
+
+rocket = rockets['saturn-v']
 
 # animation framelength in seconds
 frameLength = 0.02
@@ -26,10 +41,10 @@ v = 0
 a = 0
 h = 0
 Fv = 0
-fuel = raketti['fuel']
-m = raketti['mass'] + fuel
-G = raketti['mass'] * 9.81
-thrust = raketti['thrust']
+fuel = rocket['fuel']
+m = rocket['mass'] + fuel
+G = rocket['mass'] * 9.81
+thrust = rocket['thrust']
 tilt = 90
 
 graph = Grapher.Graph(10, 10)
@@ -43,8 +58,13 @@ thrustGraph = graph.createGraph((255,255,0), 0.001)
 freeze = False
 pause = False
 screen = None
+
+rollspeed = 0
+
 # The main loop
 while 1:
+    startTime = time.time()
+
     # freeze
     # if t >= 90:
         #print("Frozen.")
@@ -56,15 +76,15 @@ while 1:
             thrust = 0
         else:
             if thrust > 0:
-                thrustPercent = raketti['thrust'] / thrust
+                thrustPercent = rocket['thrust'] / thrust
             else:
                 thrustPercent = 0.0
-            fuel -= thrustPercent * raketti['flow'] * frameLength
+            fuel -= thrustPercent * rocket['flow'] * frameLength
 
-        m = raketti['mass'] + fuel*2
+        m = rocket['mass'] + fuel*2
 
         # update acceleration
-        drag = 0.5 * ENV['airDensity'] * (v ** 2) * raketti['area'] * 0.5 * 10
+        drag = 0.5 * ENV['airDensity'] * (v ** 2) * rocket['area'] * 0.5 * 10
         if v < 0:
             drag = -drag
             #print(thrust-drag)
@@ -84,14 +104,12 @@ while 1:
     xVal = t * 50
     # insert new values to Grapher
     if not freeze:
-        print(xVal, v)
         graph.insert(xVal,v, vGraph)
         graph.insert(xVal,a, aGraph)
         graph.insert(xVal,m, mGraph)
         graph.insert(xVal,-drag, drGraph)
         graph.insert(xVal,thrust, thrustGraph)
 
-        rollspeed = frameLength * 50
     else:
         rollspeed = 0
 
@@ -106,15 +124,15 @@ while 1:
                 # control thrust by arrow keys
                 if event.key == pygame.K_LEFT:
                     print("Scale down")
-                    thrust -= raketti['thrust']*0.1
+                    thrust -= rocket['thrust']*0.1
                     if thrust <= 0:
                         thrust = 0
 
                 if event.key == pygame.K_RIGHT:
                     print("Scale up")
-                    thrust += raketti['thrust']*0.1
-                    if thrust >= raketti['thrust']:
-                        thrust = raketti['thrust']
+                    thrust += rocket['thrust']*0.1
+                    if thrust >= rocket['thrust']:
+                        thrust = rocket['thrust']
 
             if event.key == pygame.K_2:
                 graph.adjustScale(0.1)
@@ -138,10 +156,13 @@ while 1:
 
     if not screen:
         screen = graph.getScreen()
-    pygame.draw.line(screen, (255,255,90), (10,30),(10+fuel/raketti['fuel']*300,30), 20)
+    pygame.draw.line(screen, (255,255,90), (10,30),(10+fuel/rocket['fuel']*300,30), 20)
 
     pygame.display.flip()
+
     if not freeze:
-        t = t + frameLength
+        runTime = time.time() - startTime
+        rollspeed = (frameLength + runTime) * 50
+        t = t + frameLength + runTime
 
     time.sleep(frameLength)
