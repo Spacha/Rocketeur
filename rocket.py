@@ -90,6 +90,8 @@ while 1:
         graph.insert(xVal,thrust, thrustGraph)
 
         rollspeed = frameLength*10
+    else:
+        rollspeed = 0
 
     # Events
     for event in pygame.event.get():
@@ -120,8 +122,6 @@ while 1:
             if event.key == pygame.K_SPACE:
                 freeze = not freeze
                 print("Switch Freeze")
-
-        rollspeed = 0
 
     # Graphics
     graph.render(rollspeed)
