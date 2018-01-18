@@ -97,12 +97,15 @@ class Graph:
         for attr, value in data.items():
             surface = self.font.render(attr + ': ' + str(round(value, 2)), True, (255,255,255))
 
-            self.scr.blit(surface,(10, 10+i*28))
+            self.scr.blit(surface,(10, 50+i*28))
             i += 1
-
 
     def adjustScale(self, change):
         self.scale_y += change
+
+    # return src object referring to pygame screen
+    def getScreen(self):
+        return self.scr
 
 
 

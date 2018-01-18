@@ -134,6 +134,9 @@ while 1:
         'thrust': thrust,
     })
 
+    screen = graph.getScreen()
+    pygame.draw.line(screen, (255,255,90), (10,30),(10+fuel/raketti['fuel']*300,30), 20)
+
     pygame.display.flip()
     if not freeze:
         t = t + frameLength
