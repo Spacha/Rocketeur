@@ -18,7 +18,7 @@ raketti = {
 }
 
 # animation framelength in seconds
-frameLength = 1.0
+frameLength = 0.02
 
 # Initial values (variables)
 t = float(0)    # time
@@ -42,6 +42,7 @@ thrustGraph = graph.createGraph((255,255,0), 0.001)
 
 freeze = False
 pause = False
+screen = None
 # The main loop
 while 1:
     # freeze
@@ -58,7 +59,7 @@ while 1:
                 thrustPercent = raketti['thrust'] / thrust
             else:
                 thrustPercent = 0.0
-            fuel -= thrustPercent * raketti['flow']
+            fuel -= thrustPercent * raketti['flow'] * frameLength
 
         m = raketti['mass'] + fuel*2
 
@@ -80,16 +81,17 @@ while 1:
 
     ##############################################
 
-    xVal = t * 10
+    xVal = t * 50
     # insert new values to Grapher
     if not freeze:
+        print(xVal, v)
         graph.insert(xVal,v, vGraph)
         graph.insert(xVal,a, aGraph)
         graph.insert(xVal,m, mGraph)
         graph.insert(xVal,-drag, drGraph)
         graph.insert(xVal,thrust, thrustGraph)
 
-        rollspeed = frameLength*10
+        rollspeed = frameLength * 50
     else:
         rollspeed = 0
 
@@ -134,7 +136,8 @@ while 1:
         'thrust': thrust,
     })
 
-    screen = graph.getScreen()
+    if not screen:
+        screen = graph.getScreen()
     pygame.draw.line(screen, (255,255,90), (10,30),(10+fuel/raketti['fuel']*300,30), 20)
 
     pygame.display.flip()

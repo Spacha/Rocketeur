@@ -40,21 +40,22 @@ class Graph:
 
         # draw dots
         for key, graph in enumerate(self.values):
-            prev = [0,0]                        # start from origin
+            prev = [self.originX, 0]                        # start from origin
             color = self.graphs[key]['color']   # graph specific color
 
             # draw the graph
             for val in graph:
-                x = int(val[0] + int(self.originX))
+                x = int(val[0] + self.originX)
                 y = int(val[1] * self.graphs[key]['scale_y'] * self.scale_y)    # scale factors
-
+                print(x,y)
+                
                 # if there is a gap between this and previous point
                 if abs(y - prev[1]) > 1 or abs(x - prev[0]) > 1:
                     pygame.draw.line(self.scr, color,
                         (prev[0], self.startY - prev[1]),
                         (x, self.startY - y))
                 else:
-                    self.scr.set_at((int(self.originX) + x, self.startY - y), color)
+                    self.scr.set_at((x, self.startY - y), color)
 
                 prev = [x,y]
 
@@ -116,8 +117,6 @@ class Graph:
         # new height is previous height plus velocity multiplied by passed time in seconds.
         self.height += vars['v'] * (vars['t']-self.lastUpdate)
         self.lastUpdate = vars['t']
-
-        print("Height: " + str(self.height))
 
         # draw the rocket's 'path'
         for dot in self.simudots:
