@@ -17,7 +17,7 @@ class Graph:
 
     height = 0              # simu rocket's height from surface
     lastUpdate = 0          # time(s) in which we updated simu last time
-    metersPerPixel = 10
+    metersPerPixel = 3
     simudots = []
 
 
@@ -29,7 +29,7 @@ class Graph:
         # init pygame
         pygame.init()
         self.scr = pygame.display.set_mode((width, height))
-        self.font = pygame.font.SysFont('Helvetica', 26)
+        self.font = pygame.font.SysFont('Helvetica', 20)
         self.originX = self.startX 
 
     def render(self, frameLength=0):
@@ -97,7 +97,7 @@ class Graph:
         for attr, value in data.items():
             surface = self.font.render(attr + ': ' + str(round(value, 2)), True, (255,255,255))
 
-            self.scr.blit(surface,(10, 50+i*28))
+            self.scr.blit(surface,(10, 50+i*22))
             i += 1
 
     def adjustScale(self, change):
@@ -124,7 +124,8 @@ class Graph:
         # draw the rocket
         rocketX = int(width*0.85)
         rocketY = int(height-self.height/self.metersPerPixel)
-        self.scr.set_at((rocketX, rocketY), (255,255,255))
+        # self.scr.set_at((rocketX, rocketY), (255,255,255))
+        pygame.draw.polygon(self.scr, (255,255,255), [[rocketX-3, rocketY+5], [rocketX+3, rocketY+5], [rocketX, rocketY-5]], 1)
 
         # update simudots containing the new location
         self.simudots.append((rocketX,rocketY))

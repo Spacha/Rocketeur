@@ -33,7 +33,7 @@ rockets = {
     },
 }
 
-rocket = rockets['saturn-v']
+rocket = rockets['v-2']
 
 # animation framelength in seconds
 frameLength = 0.02
