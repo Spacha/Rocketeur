@@ -116,7 +116,18 @@ class Graph:
 
         print("Height: " + str(self.height))
 
-        self.scr.set_at((int(width*0.85), int(height-self.height/self.metersPerPixel)), (255,255,255))
+        # draw the rocket's 'path'
+        for dot in self.simudots:
+            self.scr.set_at((dot[0], dot[1]), (90,90,90))
 
+        # draw the rocket
+        rocketX = int(width*0.85)
+        rocketY = int(height-self.height/self.metersPerPixel)
+        self.scr.set_at((rocketX, rocketY), (255,255,255))
+
+        # update simudots containing the new location
+        self.simudots.append((rocketX,rocketY))
+
+        # draw data
         vars['height'] = self.height
         self.drawData(vars)
