@@ -17,7 +17,7 @@ class Graph:
 
     height = 0              # simu rocket's height from surface
     lastUpdate = 0          # time(s) in which we updated simu last time
-    metersPerPixel = 10
+    pixelsPerMeter = 1
     simudots = []
 
 
@@ -111,12 +111,11 @@ class Graph:
 
         # update rocket height
         # new height is previous height plus velocity multiplied by passed time in seconds.
-        self.height += vars['v'] * (vars['t']-self.lastUpdate)
-        self.lastUpdate = vars['t']
+        self.height += vars['v'] * (vars['t']-self.lastUpdate) * self.pixelsPerMeter
 
-        print("Height: " + str(self.height))
+        print("Height: ", self.height)
 
-        self.scr.set_at((int(width*0.85), int(height-self.height/self.metersPerPixel)), (255,255,255))
+        self.scr.set_at((int(width*0.85), int(height-self.height)), (255,255,255))
 
         vars['height'] = self.height
         self.drawData(vars)
