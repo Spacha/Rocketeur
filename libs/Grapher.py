@@ -59,7 +59,6 @@ class Graph:
                 prev = [x,y]
 
         self.__drawDimensions()
-        self.__drawData()
 
         self.originX -= frameLength
 
@@ -92,11 +91,14 @@ class Graph:
         # y axis
         pygame.draw.line(self.scr, white, (self.startX, 0),(self.startX, height))
 
-    def __drawData(self):
-        surface = self.font.render('Some Text', True, (255,255,255))
+    def drawData(self, data):
 
-        self.scr.blit(surface,(10,10))
+        i = 0
+        for attr, value in data.items():
+            surface = self.font.render(attr + ': ' + str(round(value, 2)), True, (255,255,255))
 
+            self.scr.blit(surface,(10, 10+i*28))
+            i += 1
 
 
     def adjustScale(self, change):
@@ -114,3 +116,6 @@ class Graph:
         print("Height: ", self.height)
 
         self.scr.set_at((int(width*0.85), int(height-self.height)), (255,255,255))
+
+        vars['height'] = self.height
+        self.drawData(vars)

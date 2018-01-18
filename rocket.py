@@ -138,4 +138,4 @@ while 1:
     if not freeze:
         t = t + frameLength
 
-    time.sleep(frameLength/5)
+    time.sleep(frameLength)
